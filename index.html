@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANAND PAGE</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .matrix-bg { position: fixed; inset: 0; z-index: -1; opacity: 0.1; }
+        .scan-line {
+            position: fixed; top: 0; left: 0; width: 100%; height: 3.5px;
+            background: rgba(0,255,0,.5); box-shadow: 0 0 20px #00ff00;
+            animation: scan 5.5s linear infinite; z-index: 2;
+        }
+        @keyframes scan { 0%{top:0} 100%{top:100%} }
+
+        #accessScreen {
+            position: fixed; inset: 0;
+            display: flex; justify-content: center; align-items: center;
+            background: #000; z-index: 10; transition: opacity 1.4s ease;
+        }
+
+        .access-container {
+            text-align: center;
+            padding: 25px 30px;
+            border: 2px solid #00ff00;
+            box-shadow: 0 0 25px #00ff00;
+            background: rgba(0,0,0,.9);
+            max-width: 400px; width: 85%;
+        }
+
+        .glitch {
+            font-size: 2.8em;
+            animation: glitch 3s infinite;
+            margin-bottom: 20px;
+            letter-spacing: 4px;
+        }
+
+        @keyframes glitch {
+            0%,100%{transform:translate(0)}
+            20%{transform:translate(-2px,2px)}
+            40%{transform:translate(-2px,-2px)}
+            60%{transform:translate(2px,2px)}
+            80%{transform:translate(2px,-2px)}
+        }
+
+        .subtitle { margin-bottom: 35px; animation: blink 2s infinite; }
+        @keyframes blink { 50%{opacity:.5} }
+
+        .enter-btn {
+            background: transparent; color: #00ff00;
+            border: 2px solid #00ff00;
+            padding: 14px 35px; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+
+        .loading { display:none; margin-top:20px; font-size:.9em; }
+        .progress-container { display:none; height:5px; background:#003300; margin-top:20px; }
+        .progress-bar { height:100%; width:0%; background:#00ff00; }
+
+        #terminalScreen { display:none; opacity:0; transition:opacity 1s ease; }
+
+        .terminal { max-width:800px; margin:auto; padding:20px; }
+
+        .header {
+            text-align:center; margin-bottom:30px;
+            border:2px solid #00ff00; padding:25px;
+            opacity:0; transform:translateY(-20px);
+            transition:.8s;
+        }
+        .header.visible { opacity:1; transform:translateY(0); }
+
+        .command-line {
+            background:rgba(0,255,0,.1);
+            padding:15px; margin:10px 0;
+            border-left:4px solid #00ff00;
+            opacity:0; transform:translateX(-20px);
+            transition:.6s;
+        }
+        .command-line.visible { opacity:1; transform:none; }
+
+        .prompt { color:#0080ff; font-weight:bold; }
+
+        .content-section {
+            background:rgba(0,0,0,.85);
+            border:2px solid #00ff00;
+            padding:25px; margin-bottom:25px;
+            opacity:0; transform:scale(.9); transition:.5s;
+        }
+        .content-section.visible { opacity:1; transform:scale(1); }
+
+        .section-title {
+            text-align:center; border-bottom:2px solid #00ff00;
+            margin-bottom:20px; padding-bottom:12px;
+        }
+
+        .skills-grid {
+            display:grid; grid-template-columns:repeat(2,1fr); gap:12px;
+        }
+
+        .skill-item, .info-item {
+            background:rgba(0,255,0,.1);
+            padding:12px; border:2px solid #00ff00;
+            text-align:center; cursor:pointer;
+            opacity:0; transform:scale(.8); transition:.3s;
+        }
+        .skill-item.visible, .info-item.visible {
+            opacity:1; transform:scale(1);
+        }
+
+        .footer {
+            text-align:center; padding:25px;
+            border-top:2px solid #00ff00;
+            opacity:0; transform:translateY(20px);
+            transition:.8s;
+        }
+        .footer.visible { opacity:1; transform:none; }
+
+        .access-footer {
+            position:absolute; bottom:20px; width:100%;
+            text-align:center; font-size:.8em;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="matrix-bg" id="matrixBg"></div>
+<div class="scan-line"></div>
+
+<!-- ACCESS SCREEN -->
+<div id="accessScreen">
+    <div class="access-container">
+        <h1 class="glitch">SYSTEM ACCESS</h1>
+        <p class="subtitle">SECURE TERMINAL V1</p>
+        <button class="enter-btn" id="enterBtn">ENTER SYSTEM</button>
+        <div class="loading" id="loading">INITIALIZING SECURITY PROTOCOLS...</div>
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+    </div>
+    <div class="access-footer">Created by: ANAND</div>
+</div>
+
+<!-- TERMINAL -->
+<div id="terminalScreen">
+    <div class="terminal">
+        <div class="header" id="mainHeader">
+            <h1 class="glitch">ANAND</h1>
+            <p>> A normal dev 🙂 <</p>
+        </div>
+
+        <div class="command-line" id="commandLine1">
+            <span class="prompt">SECURITY:~$ </span>100% safe
+        </div>
+
+        <div class="command-line" id="commandLine2">
+            <span class="prompt">root@msg.from.me:~$ </span>welcome to my page
+        </div>
+
+        <div class="content-section" id="aboutSection">
+            <h2 class="section-title">ABOUT ME</h2>
+            <div class="info-item">NICK NAME: ANAND</div>
+            <div class="info-item">SPECIALIZATION: DEVELOPER</div>
+            <div class="info-item">EXPERIENCE: 1.5 YEARS</div>
+        </div>
+
+        <div class="content-section" id="knowledgeSection">
+            <h2 class="section-title">MY KNOWLEDGE</h2>
+            <div class="skills-grid">
+                <div class="skill-item">C++</div>
+                <div class="skill-item">HTML</div>
+                <div class="skill-item">PYTHON</div>
+                <div class="skill-item">JS</div>
+                <div class="skill-item">MONGODB</div>
+                <div class="skill-item">VERCEL</div>
+                <div class="skill-item">RENDER</div>
+                <div class="skill-item">NODEJS</div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">CONTACT</h2>
+            <div class="info-item">EMAIL: anandsingh373777@gmail.com</div>
+            <div class="info-item">TELEGRAM: ANAND x PAPA</div>
+        </div>
+
+        <div class="footer" id="mainFooter">
+            <p>ANAND © 2025 | DEVELOPER</p>
+            <p>FOR EDUCATIONAL PURPOSES ONLY</p>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById("enterBtn").onclick = () => {
+    document.getElementById("loading").style.display="block";
+    document.getElementById("progressContainer").style.display="block";
+    let w=0; let bar=setInterval(()=>{
+        w++; document.getElementById("progressBar").style.width=w+"%";
+        if(w>=100){
+            clearInterval(bar);
+            document.getElementById("accessScreen").style.display="none";
+            document.getElementById("terminalScreen").style.display="block";
+            document.getElementById("terminalScreen").style.opacity=1;
+            document.querySelectorAll(".header,.command-line,.content-section,.skill-item,.info-item,.footer")
+            .forEach(e=>e.classList.add("visible"));
+        }
+    },20);
+};
+</script>
+
+</body>
+</html>
